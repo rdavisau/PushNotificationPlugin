@@ -1,6 +1,6 @@
 variables:
   MONO_VERSION: 6_12_0
-  NETCORE_VERSION: '5.0.x'
+  NETCORE_VERSION: '6.0.x'
 
 # set the version numbering, this results in 1.0.1 for the first build incrementing that way.
 name: 3.6$(rev:.r)
@@ -30,22 +30,34 @@ steps:
      includePreviewVersions: false
 
 # build and pack a beta version of the NuGet package. Versioning is done through the name tag in this definition.
-- task: MSBuild@1
-  displayName: 'Build & Pack beta build'
-  inputs:
-    solution: 'src/Plugin.PushNotification/Plugin.PushNotification.csproj'
-    configuration: 'Release'
-    msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false /t:Pack /p:PackageVersion=$(Build.BuildNumber)-beta /p:PackageOutputPath=$(build.artifactstagingdirectory)/beta /p:AssemblyFileVersion=$(Build.BuildNumber)'
-    clean: true
+# - task: MSBuild@1
+#   displayName: 'Build & Pack beta build'
+#   inputs:
+#     solution: 'src/Plugin.PushNotification/Plugin.PushNotification.csproj'
+#     configuration: 'Release'
+#     msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false /t:Pack /p:PackageVersion=$(Build.BuildNumber)-beta /p:PackageOutputPath=$(build.artifactstagingdirectory)/beta /p:AssemblyFileVersion=$(Build.BuildNumber)'
+#     clean: true
 
-# build and pack a final version of the NuGet package. Versioning is done through the name tag in this definition.
-- task: MSBuild@1
-  displayName: 'Build & Pack final build'
+# # build and pack a final version of the NuGet package. Versioning is done through the name tag in this definition.
+# - task: MSBuild@1
+#   displayName: 'Build & Pack final build'
+#   inputs:
+#     solution: 'src/Plugin.PushNotification/Plugin.PushNotification.csproj'
+#     configuration: 'Release'
+#     msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false /t:Pack /p:PackageVersion=$(Build.BuildNumber) /p:PackageOutputPath=$(build.artifactstagingdirectory)/final /p:AssemblyFileVersion=$(Build.BuildNumber)'
+#     clean: true
+
+- task: CmdLine@2
+  displayName: dotnet workload installarino
   inputs:
-    solution: 'src/Plugin.PushNotification/Plugin.PushNotification.csproj'
-    configuration: 'Release'
-    msbuildArguments: '/restore /t:Build /p:ContinuousIntegrationBuild=true /p:Deterministic=false /t:Pack /p:PackageVersion=$(Build.BuildNumber) /p:PackageOutputPath=$(build.artifactstagingdirectory)/final /p:AssemblyFileVersion=$(Build.BuildNumber)'
-    clean: true
+    script: 'dotnet workload install maui'
+
+- task: CmdLine@2
+  displayName: dotnet pack
+  inputs:
+    script: |
+      dotnet build src/Plugin.PushNotification/Plugin.PushNotification.net6.csproj -c Release
+      dotnet pack src/Plugin.PushNotification/Plugin.PushNotification.net6.csproj --output $(build.artifactstagingdirectory)/final -c Release --include-source
     
 # copy all the nupkg files created to the artifact directory
 - task: CopyFiles@2

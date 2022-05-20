@@ -1,6 +1,6 @@
 variables:
   MONO_VERSION: 6_12_0
-  NETCORE_VERSION: '5.0.x'
+  NETCORE_VERSION: '6.0.x'
   XCODE_VERSION: 12.3
 
 # Starter pipeline

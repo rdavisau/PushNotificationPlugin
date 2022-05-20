@@ -27,10 +27,10 @@ namespace Plugin.PushNotification
 
         static IPushNotification CreatePushNotification()
         {
-#if NETSTANDARD2_0
-            return null;
-#else
+#if NET6MOBILE
             return new PushNotificationManager();
+#else
+            return null;
 #endif
         }
 
