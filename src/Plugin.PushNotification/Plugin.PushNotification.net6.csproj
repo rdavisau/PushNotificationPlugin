@@ -6,9 +6,9 @@
         <RootNamespace>Plugin.PushNotification</RootNamespace>
         <PackageId>Plugin.PushNotification.net6</PackageId>
         <Product>$(AssemblyName) ($(TargetFramework))</Product>
-        <AssemblyVersion>3.4.3</AssemblyVersion>
-        <AssemblyFileVersion>3.4.3</AssemblyFileVersion>
-        <Version>3.4.3</Version>
+        <AssemblyVersion>3.4.4</AssemblyVersion>
+        <AssemblyFileVersion>3.4.4</AssemblyFileVersion>
+        <Version>3.4.4</Version>
         <PackOnBuild>true</PackOnBuild>
         <NeutralLanguage>en</NeutralLanguage>
         <LangVersion>default</LangVersion>
@@ -78,4 +78,14 @@
         <Compile Include="**\*.ios.cs" />
         <Compile Include="**\*.ios.*.cs" />
     </ItemGroup>
+
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0-ios' Or '$(TargetFramework)' == 'net6.0-android' or '$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.Maui.Dependencies" Version="$(MauiVersion)">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Maui.Extensions" Version="$(MauiVersion)">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
