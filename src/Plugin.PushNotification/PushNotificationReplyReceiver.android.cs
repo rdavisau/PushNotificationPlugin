@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Plugin.PushNotification
 {
-    [BroadcastReceiver]
+    [BroadcastReceiver(Exported = false)]
     public class PushNotificationReplyReceiver : BroadcastReceiver
     {
         public override void OnReceive(Context context, Intent intent)
